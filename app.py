@@ -11,11 +11,11 @@ db = client.dbsparta
 @app.route('/')
 def home():
     userInt_receive = request.cookies.get('userInt')
-    return render_template('index.html')
-
-@app.route('/login')
-def loginPage():
     return render_template('login.html')
+
+@app.route('/index')
+def loginPage():
+    return render_template('index.html')
 
 
 # 몽고DB에 닉네임, 이메일, 비밀번호 데이터 넣기
@@ -87,8 +87,8 @@ def todo_delete():
     return jsonify({'msg': '삭제 완료'})
 
 
-#userInt 가져오기
-@app.route("/userInt", methods=["GET"])
+#유저 닉네임 
+@app.route("/userNickname", methods=["GET"])
 def userInt():
     userInt_receive = int(request.cookies.get('userInt'))
     userinfo = db.user.find_one({'userInt': userInt_receive}, {'_id': 0})
@@ -99,11 +99,12 @@ def userInt():
 @app.route("/todo", methods=["GET"])
 def todo_get():    
     userInt_receive = int(request.cookies.get('userInt'))
+    nickname_receive = db.user.find_one({'userInt': userInt_receive})['nickname']
     todoinfo = list(db.todo.find({'userInt': userInt_receive}))
     for i in range(len(todoinfo)):
         todoinfo[i]['_id'] = str(todoinfo[i]['_id'])
     
-    return jsonify({'result': todoinfo, 'userInt': userInt_receive})
+    return jsonify({'result': todoinfo, 'userInt': userInt_receive, 'nickname': nickname_receive})
 
 
 

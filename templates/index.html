@@ -24,13 +24,53 @@
     />
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 
-    <title>✏️To DO List</title>
+    <title>🐸 TO-DO-LI 🐸</title>
+    <meta property="og:title" content="16기 15조 : 웹미니프로젝트" />
+    <meta property="og:description" content="🐸TO-DO-LI🐸" />
+    <meta property="og:image" content="" />
 
     <style>
-      .title {
-        /* background-color: rebeccapurple; */
+      @import url('https://fonts.googleapis.com/css2?family=Gaegu&display=swap');
+
+      * {
+        font-family: 'Gaegu', cursive;
+      }
+
+      body,
+      h1,
+      h2,
+      h3,
+      h4,
+      p,
+      div,
+      a {
+        margin: 0px;
+        padding: 0px;
+        text-decoration: none;
+        font-weight: normal;
+      }
+
+      body {
+        background-color: #f0fff0;
+      }
+
+      .box {
+        margin: auto;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
         width: 1200px;
+      }
+
+      /* 상단 박스  */
+
+      .topbox {
+        /* background-color: rebeccapurple; */
         height: 150px;
+        width: 85%;
         margin: auto;
         padding: 0px 40px;
 
@@ -40,23 +80,99 @@
         align-items: center;
       }
 
-      .list {
+      .currentWeather {
+        font-size: 28px;
+      }
+
+      .title {
+        font-size: 35px;
+        margin: auto;
+      }
+
+      .logoutbtn {
+        height: 50px;
+        width: 100px;
+        background-color: lemonchiffon;
+        border-radius: 40px;
+        font-size: 15px;
+        border: 1px solid gainsboro;
+        color: gray;
+        font-weight: 600;
+      }
+
+      /* 투두 리스트 출력 */
+      .listBox {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        width: 95%;
+        padding: 10px;
+
+        background-color: #f0fff0;
+      }
+
+      .todo_list {
         background-color: #8dcd52;
-        width: 1200px;
-        height: 150px;
-        margin: 10px auto;
-        padding: 0px 40px;
 
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
         align-items: center;
+        justify-content: left;
+
+        margin-bottom: 10px;
+        width: 90%;
+        min-height: 50px;
+
+        font-size: 30px;
+        border-radius: 40px;
+      }
+
+      .todo_date {
+        margin-right: 20px;
+        font-size: 20px;
+        margin: 0 20px;
+        font-weight: bold;
+      }
+
+      .todo_list > h2 {
+        font-size: 20px;
+        margin-right: auto;
+      }
+
+      .todo_list > input {
+        width: 20px;
+        height: 20px;
+        margin-left: auto;
+        margin-right: 20px;
+        outline: 0;
+        cursor: pointer;
+      }
+
+      .todo_list > button {
+        margin-right: 20px;
+        cursor: pointer;
+        font-size: 20px;
+      }
+
+      /* 투두리스트 완료시 타이틀과 날짜에 취소선 */
+      .todo_list > .todo_date_done {
+        margin: 0 20px;
+
+        text-decoration: line-through;
+        font-size: 20px;
+        font-weight: bold;
+      }
+
+      .listBox > .todo_list > h2.done {
+        text-decoration: line-through;
       }
 
       .myinput {
-        background-color: white;
-        width: 1200px;
-        height: 150px;
+        background-color: lemonchiffon;
+        width: 1100px;
+        height: 130px;
         padding: 0px 40px;
 
         display: flex;
@@ -66,35 +182,45 @@
 
         position: fixed;
         bottom: 40px;
-        /* ㄴ 밑에서 10px 위에 고정하기 */
-        left: calc(50% - 600px);
-        /* ㄴ position: fixed; 일때 가운데로 오게는 설정
-                  (600px는 cta의 width: 1200px; 반값) */
-        box-shadow: 0px 0px 10px 0px lightgray;
+        /* 밑에서 10px 위에 고정하기 */
+        left: calc(50% - 550px);
+        /* position: fixed; 일때 가운데로 오게는 설정
+       (600px는 cta의 width: 1200px; 반값) */
 
-        border-radius: 30px;
+        border-radius: 40px;
+        border: 1px solid gainsboro;
       }
 
       .date {
-        width: 150px;
-        height: 80px;
-        font-size: 20px;
-        border-radius: 30px;
+        width: 130px;
+        height: 65px;
+        font-size: 16px;
+        text-align: center;
+        padding-left: 10px;
+        border-radius: 40px;
+        color: gray;
+        border: 1px solid gainsboro;
       }
 
       .inputList {
-        width: 800px;
-        height: 80px;
-        font-size: 25px;
+        width: 700px;
+        height: 65px;
+        font-size: 20px;
         padding-left: 20px;
-        border-radius: 30px;
+        border-radius: 40px;
+        color: gray;
+        border: 1px solid gainsboro;
       }
 
       .myinput > button {
-        width: 120px;
-        height: 80px;
+        width: 150px;
+        height: 65px;
         font-size: 20px;
-        border-radius: 30px;
+        border-radius: 40px;
+        background-color: gainsboro;
+        border: 1px solid gainsboro;
+        color: gray;
+        font-weight: 800;
       }
     </style>
 
@@ -103,6 +229,8 @@
       $(document).ready(function () {
         // userInfo();
         show_todo();
+        renderCurrentWeather();
+        $('#listBox').empty();
       });
 
       // 유저데이터 가져오기
@@ -117,38 +245,45 @@
 
       // 투두데이터 가져오기
       function show_todo() {
+        $('#title').empty();
         fetch('/todo')
           .then((res) => res.json())
           .then((data) => {
-            rows = data['result'];
-            console.log(rows);
+            let rows = data['result'];
+            let nickname = data['nickname'];
+
             for (let i = 0; i < rows.length; i++) {
               const todo = rows[i].list;
               const id = rows[i]._id;
               const done = rows[i].done;
               const date = rows[i].date;
+              nickname = nickname;
+
               let temp_html = ``;
-              if (done == 0) {
-                temp_html = `<div class="todo_list" id="todo_list">
-                              <li>
-                                <h4>${date}</h4>
+              if (done === 0) {
+                temp_html = `<div id="listBox" class="listBox">
+                              <div class="todo_list">
+                                <div class="todo_date">${date}</div>
                                 <h2>${todo}</h2>
-                                <input class="todo_check" type="checkbox" id=${id} onclick="done_todo(event)">
+                                <input id=${id} class="todo_check" type="checkbox" onclick="done_todo(event)">
                                 <button id=${id} onclick="delete_todo(event)" type="button" class="btn-close" aria-label="Close"></button>
-                              </li>
+                              </div>
                             </div>`;
-              } else {
-                temp_html = `<div class="todo_list" id="todo_list">
-                              <li>
-                                <h4>${date}</h4>
-                                <h2 class="done">${todo}</h2>
-                                <input type="checkbox" checked id=${id} onclick="cancel_todo(event)">
-                                <button id=${id} onclick="delete_todo(event)" type="button" class="btn-close" aria-label="Close"></button>
-                              </li>
+              } else if (done === 1) {
+                temp_html = `<div id="listBox" class="listBox">
+                              <div class="todo_list">
+                                  <div class="todo_date_done">${date}</div>
+                                  <h2 class="done">${todo}</h2>
+                                  <input type="checkbox" checked id=${id} onclick="cancel_todo(event)">
+                                  <button id=${id} onclick="delete_todo(event)" type="button" class="btn-close" aria-label="Close"></button>
+                              </div>
                             </div>`;
               }
-              $('#todo_list').append(temp_html);
+              $('#listBox').append(temp_html);
             }
+
+            let temp_html2 = `<div id ="title" class="title">🐸 ${nickname}님의 TO-DO-LI 🐸</div>`;
+            $('#title').append(temp_html2);
           });
       }
 
@@ -156,7 +291,6 @@
       function save_todo() {
         let date = $('#date').val();
         let list = $('#inputList').val();
-        console.log(date, list);
 
         let formData = new FormData();
         formData.append('date_give', date);
@@ -170,21 +304,6 @@
           });
       }
 
-      //todo 지우기
-      function delete_todo(event) {
-        const id = event.target.getAttribute('id');
-        $.ajax({
-          type: 'POST',
-          url: '/todo/delete',
-          data: { id_give: id },
-          success: function (response) {
-            alert(response['msg']);
-            window.location.reload();
-          },
-        });
-      }
-
-      // done
       function done_todo(event) {
         const id = event.target.getAttribute('id');
         $.ajax({
@@ -198,7 +317,6 @@
         });
       }
 
-      // cacel
       function cancel_todo(event) {
         const id = event.target.getAttribute('id');
         $.ajax({
@@ -211,38 +329,67 @@
           },
         });
       }
+
+      function delete_todo(event) {
+        const id = event.target.getAttribute('id');
+        $.ajax({
+          type: 'POST',
+          url: '/todo/delete',
+          data: { id_give: id },
+          success: function (response) {
+            alert(response['msg']);
+            window.location.reload();
+          },
+        });
+      }
+
+      function renderCurrentWeather() {
+        let url = `http://spartacodingclub.shop/sparta_api/weather/seoul`; // https://goweather.herokuapp.com/weather/seoul > 연결이 안될때도 있어서 서울의 날씨로 가져옴
+        fetch(url)
+          .then((res) => res.json())
+          .then((data) => {
+            let Weather = data['temp'].toFixed(1); // 소수점 한자리까지 가져옴(반올림됨)
+            $('#currentWeather').text(Weather + '도');
+          });
+      }
+
+      function logout() {
+        window.location.href = '/';
+      }
     </script>
   </head>
 
   <body>
-    <!-- 날씨, 제목, 로그아웃 -->
-    <div class="title">
-      <div>날씨</div>
-      <h1>To Do List</h1>
-      <button>로그아웃</button>
-    </div>
-
-    <!-- 입력된 리스트들(날짜, 내용, 체크) -->
-    <div id="listBox" class="listBox">
-      <div class="list">
-        <h4>날짜</h4>
-        <h3>웹미니 프로젝트 제출하기</h3>
-        <button>체크</button>
+    <div class="box">
+      <!-- 날씨, 제목, 로그아웃 -->
+      <div class="topbox">
+        <div id="currentWeather" class="currentWeather"></div>
+        <div id="title" class="title">🐸 {투두리}님의 TO-DO-LI🐸</div>
+        <div>
+          <button class="logoutbtn" onclick="logout()">로그아웃</button>
+        </div>
       </div>
-    </div>
 
-    <div id="todo_list"></div>
+      <!-- 입력된 리스트들(날짜, 내용, 체크) -->
+      <div id="listBox" class="listBox">
+        <div class="todo_list">
+          <div class="todo_date">날짜</div>
+          <h3>웹미니 프로젝트 제출하기</h3>
+          <button>체크</button>
+        </div>
+      </div>
 
-    <!-- 날짜선택, 인풋(내용작성), 기록하기버튼 -->
-    <div class="myinput">
-      <input id="date" class="date" type="date" />
-      <input
-        id="inputList"
-        class="inputList"
-        type="text"
-        placeholder="To Do List를 작성해주세요"
-      />
-      <button onclick="save_todo()">기록하기</button>
+      <!-- 날짜선택, 인풋(내용작성), 기록하기버튼 -->
+      <div class="myinput">
+        <input id="date" class="date" type="date" />
+        <input
+          id="inputList"
+          class="inputList"
+          type="text"
+          placeholder="To Do List를 작성해주세요"
+        />
+        <button onclick="save_todo()">기록하기</button>
+      </div>
     </div>
   </body>
 </html>
