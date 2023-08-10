@@ -50,10 +50,12 @@ def login():
 # 몽고DB에 to-do-list 데이터 넣기
 @app.route("/todo", methods=["POST"])
 def todo_post():
+    userInt_receive = int(request.cookies.get('userInt'))
     date_receive = request.form['date_give']
     list_receive = request.form['list_give']
 
     doc = {
+        'userInt' : userInt_receive,
         'date': date_receive,
         'list': list_receive,
         'done' : 0
@@ -93,13 +95,11 @@ def userInt():
     
     return jsonify({'result': userinfo, 'userInt':userInt_receive})
 
-#몽고디비에서 num 값 대신 ID 값 가져오기
+#로그인한 유저 정보
 @app.route("/todo", methods=["GET"])
-def todo_get():
-    #로그인한 유저 정보
+def todo_get():    
     userInt_receive = int(request.cookies.get('userInt'))
     todoinfo = list(db.todo.find({'userInt': userInt_receive}))
-    
     for i in range(len(todoinfo)):
         todoinfo[i]['_id'] = str(todoinfo[i]['_id'])
     
