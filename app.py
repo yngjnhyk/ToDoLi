@@ -98,9 +98,11 @@ def userInt():
 def todo_get():
     #로그인한 유저 정보
     userInt_receive = int(request.cookies.get('userInt'))
-    todoinfo = db.todo.find_one({'userInt': userInt_receive})
-    todoinfo['_id'] = str(todoinfo['_id'])
-        
+    todoinfo = list(db.todo.find({'userInt': userInt_receive}))
+    
+    for i in range(len(todoinfo)):
+        todoinfo[i]['_id'] = str(todoinfo[i]['_id'])
+    
     return jsonify({'result': todoinfo, 'userInt': userInt_receive})
 
 
