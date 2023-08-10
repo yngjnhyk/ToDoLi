@@ -100,102 +100,15 @@
     <script>
       // 몽고DB to-do-list 데이터 화면에 출력하기
       $(document).ready(function () {
-        show_todo();
+        success_show_todo();
       });
-      function show_todo() {
-        $.ajax({
-          type: 'GET',
-          url: '/todo',
-          data: {},
-          success: function (response) {
-            let rows = response['todo_memos'];
 
-            for (let i = 0; i < rows.length; i++) {
-              const todo = rows[i].list;
-              const id = rows[i]._id;
-              const done = rows[i].done;
-              const date = rows[i].date;
-
-              let temp_html = ``;
-              if (done == 0) {
-                temp_html = `<div class="todo_list" id="todo_list">
-                              <li>
-                                <h4>${date}</h4>
-                                <h2>${todo}</h2>
-                                <input class="todo_check" type="checkbox" id=${id} onclick="done_todo(event)">
-                                <button id=${id} onclick="delete_todo(event)" type="button" class="btn-close" aria-label="Close"></button>
-                              </li>
-                            </div>`;
-              } else {
-                temp_html = `<div class="todo_list" id="todo_list">
-                              <li>
-                                <h4>${date}</h4>
-                                <h2 class="done">${todo}</h2>
-                                <input type="checkbox" checked id=${id} onclick="cancel_todo(event)">
-                                <button id=${id} onclick="delete_todo(event)" type="button" class="btn-close" aria-label="Close"></button>
-                              </li>
-                            </div>`;
-              }
-              $('#todo_list').append(temp_html);
-            }
-          },
-        });
-      }
-
-      // 몽고DB에 to-do-list 데이터 넣기
-      function save_todo() {
-        let date = $('#date').val();
-        let list = $('#inputList').val();
-
-        let formData = new FormData();
-        formData.append('date_give', date);
-        formData.append('list_give', list);
-
-        fetch('/todo', { method: 'POST', body: formData })
-          .then((response) => response.json())
+      function success_show_todo() {
+        fetch('/userInt')
+          .then((res) => res.json())
           .then((data) => {
-            alert(data['msg']);
-            window.location.reload();
+            console.log(data);
           });
-      }
-
-      function done_todo(event) {
-        const id = event.target.getAttribute('id');
-        $.ajax({
-          type: 'POST',
-          url: '/todo/done',
-          data: { id_give: id },
-          success: function (response) {
-            alert(response['msg']);
-            window.location.reload();
-          },
-        });
-      }
-
-      function cancel_todo(event) {
-        const id = event.target.getAttribute('id');
-        $.ajax({
-          type: 'POST',
-          url: '/todo/cancel',
-          data: { id_give: id },
-          success: function (response) {
-            alert(response['msg']);
-            window.location.reload();
-          },
-        });
-      }
-
-      function delete_todo(event) {
-        const id = event.target.getAttribute('id');
-        $.ajax({
-          type: 'POST',
-          url: '/todo/delete',
-          data: { id_give: id },
-          success: function (response) {
-            alert(response['msg']);
-            window.location.reload();
-          },
-        });
       }
     </script>
   </head>
@@ -226,7 +139,7 @@
         type="text"
         placeholder="To Do List를 작성해주세요"
       />
-      <button onclick="save_todo()">기록하기</button>
+      <button>기록하기</button>
     </div>
   </body>
 </html>

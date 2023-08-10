@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <title>LoginPage</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <style>
       /* css 초기화 세팅 */
       @charset "UTF-8";
@@ -109,6 +110,8 @@
               // 로그인이 정상적으로 되면, 토큰을 받아옵니다.
               // 이 토큰을 mytoken이라는 키 값으로 쿠키에 저장합니다.
               //$.cookie('mytoken', response['token']);
+              console.log(response['userNickname']);
+              $.cookie('userNickname', response['userNickname']);
               alert('로그인 완료!');
               window.location.href = '/';
             } else {

@@ -10,6 +10,7 @@ db = client.dbsparta
 
 @app.route('/')
 def home():
+    userInt_receive = request.cookies.get('userInt')
     return render_template('index.html')
 
 @app.route('/login')
@@ -47,56 +48,26 @@ def login():
     if result is not None:
 
         # token을 줍니다.
-        return jsonify({'result': 'success', 'nickname': result['nickname']})
+        return jsonify({'result': 'success', 'userNickname': result['nickname']})
     # 찾지 못하면
     else:
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
+
+
+
+#userInt 가져오기
+@app.route("/userInt", methods=["GET"])
+def userInt():
+    userNickname_receive = request.cookies.get('userNickname')
+    userinfo = db.todo.find_one({'nickname': userNickname_receive}, {'_id': 0})
+
     
-# 몽고DB에 to-do-list 데이터 넣기
-@app.route("/todo", methods=["POST"])
-def todo_post():
-    date_receive = request.form['date_give']
-    list_receive = request.form['list_give']
-
-    doc = {
-        'date': date_receive,
-        'list': list_receive,
-        'done' : 0
-    }
-    db.todo.insert_one(doc)
-    return jsonify({'msg': '입력 완료!'})
+    return jsonify({'result': userinfo, 'userNickname':userNickname_receive})
 
 
-#투두 리스트 완료 체크할 때
-@app.route("/todo/done", methods=["POST"])
-def todo_done():
-    id_receive = request.form['id_give']
-    db.todo.update_one({'_id': ObjectId(id_receive)}, {'$set': {'done': 1}})
 
-    return jsonify({'msg': '완료!'})
 
-#투두 완료 취소 
-@app.route("/todo/cancel", methods=["POST"])
-def todo_cancel():
-    id_receive = request.form['id_give']
-    db.todo.update_one({'_id': ObjectId(id_receive)}, {'$set': {'done': 0}})
-    return jsonify({'msg': '완료 취소!'})
-
-#투두 삭제
-@app.route("/todo/delete", methods=["POST"])
-def todo_delete():
-    id_receive = request.form['id_give']
-    db.todo.delete_one({'_id': ObjectId(id_receive)})
-    return jsonify({'msg': '삭제 완료'})
-
-#몽고디비에서 num 값 대신 ID값 가져오기
-@app.route("/todo", methods=["GET"])
-def todo_get():
-    todo_memo_list = list(db.todo.find())
-
-    for i in range(len(todo_memo_list)):
-        todo_memo_list[i]['_id'] = str(todo_memo_list[i]['_id'])
-    return jsonify({'todo_memos': todo_memo_list})
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5001, debug=True)
+
