@@ -101,17 +101,14 @@
             id_give: $('#email').val(),
             pw_give: $('#pw').val(),
             nick_give: $('#nick').val(),
-            // todoMemo_give: $('#todoMemo').val(),
-            // done_give: $('#done').val(),
-            // date_give: $('#date').val(),
           },
           success: function (response) {
             if (response['result'] == 'success') {
               // 로그인이 정상적으로 되면, 토큰을 받아옵니다.
               // 이 토큰을 mytoken이라는 키 값으로 쿠키에 저장합니다.
               //$.cookie('mytoken', response['token']);
-              console.log(response['userNickname']);
-              $.cookie('userNickname', response['userNickname']);
+              console.log(response['userInt']);
+              $.cookie('userInt', response['userInt']);
               alert('로그인 완료!');
               window.location.href = '/';
             } else {
@@ -133,9 +130,6 @@
       <input id="nick" type="text" placeholder="NickName" />
       <input id="email" type="email" placeholder="Email" />
       <input id="pw" type="password" placeholder="Password" />
-      <!-- <input id="todoMemo" type="password" placeholder="Password" />
-      <input id="done" type="password" placeholder="Password" />
-      <input id="date" type="password" placeholder="Password" /> -->
       <button onclick="login()">Login</button>
     </div>
   </body>

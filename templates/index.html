@@ -100,14 +100,41 @@
     <script>
       // 몽고DB to-do-list 데이터 화면에 출력하기
       $(document).ready(function () {
-        success_show_todo();
+        userInfo();
+        show_todo();
       });
 
-      function success_show_todo() {
+      // 유저데이터 가져오기
+      function userInfo() {
         fetch('/userInt')
           .then((res) => res.json())
           .then((data) => {
             console.log(data);
+          });
+      }
+
+      function show_todo() {
+        fetch('/todo')
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+          });
+      }
+
+      // 몽고DB에 to-do-list 데이터 넣기
+      function save_todo() {
+        let date = $('#date').val();
+        let list = $('#inputList').val();
+
+        let formData = new FormData();
+        formData.append('date_give', date);
+        formData.append('list_give', list);
+
+        fetch('/todo', { method: 'POST', body: formData })
+          .then((response) => response.json())
+          .then((data) => {
+            alert(data['msg']);
+            window.location.reload();
           });
       }
     </script>
@@ -139,7 +166,7 @@
         type="text"
         placeholder="To Do List를 작성해주세요"
       />
-      <button>기록하기</button>
+      <button onclick="save_todo()">기록하기</button>
     </div>
   </body>
 </html>
