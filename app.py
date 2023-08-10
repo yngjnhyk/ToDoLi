@@ -96,10 +96,12 @@ def userInt():
 #몽고디비에서 num 값 대신 ID 값 가져오기
 @app.route("/todo", methods=["GET"])
 def todo_get():
+    #로그인한 유저 정보
     userInt_receive = int(request.cookies.get('userInt'))
-    todoinfo = db.todo.find_one({'userInt': userInt_receive}, {'_id': 0})
-    
-    return jsonify({'result': todoinfo, 'userInt':userInt_receive})
+    todoinfo = db.todo.find_one({'userInt': userInt_receive})
+    todoinfo['_id'] = str(todoinfo['_id'])
+        
+    return jsonify({'result': todoinfo, 'userInt': userInt_receive})
 
 
 

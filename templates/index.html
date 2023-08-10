@@ -22,6 +22,7 @@
       href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap"
       rel="stylesheet"
     />
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 
     <title>✏️To DO List</title>
 
@@ -100,7 +101,7 @@
     <script>
       // 몽고DB to-do-list 데이터 화면에 출력하기
       $(document).ready(function () {
-        userInfo();
+        // userInfo();
         show_todo();
       });
 
@@ -109,15 +110,44 @@
         fetch('/userInt')
           .then((res) => res.json())
           .then((data) => {
-            console.log(data);
+            rows = [data['result']];
+            console.log(rows);
           });
       }
 
+      // 투두데이터 가져오기
       function show_todo() {
         fetch('/todo')
           .then((res) => res.json())
           .then((data) => {
-            console.log(data);
+            rows = [data['result']];
+            for (let i = 0; i < rows.length; i++) {
+              const todo = rows[i].list;
+              const id = rows[i]._id;
+              const done = rows[i].done;
+              const date = rows[i].date;
+              let temp_html = ``;
+              if (done == 0) {
+                temp_html = `<div class="todo_list" id="todo_list">
+                              <li>
+                                <h4>${date}</h4>
+                                <h2>${todo}</h2>
+                                <input class="todo_check" type="checkbox" id=${id} onclick="done_todo(event)">
+                                <button id=${id} onclick="delete_todo(event)" type="button" class="btn-close" aria-label="Close"></button>
+                              </li>
+                            </div>`;
+              } else {
+                temp_html = `<div class="todo_list" id="todo_list">
+                              <li>
+                                <h4>${date}</h4>
+                                <h2 class="done">${todo}</h2>
+                                <input type="checkbox" checked id=${id} onclick="cancel_todo(event)">
+                                <button id=${id} onclick="delete_todo(event)" type="button" class="btn-close" aria-label="Close"></button>
+                              </li>
+                            </div>`;
+              }
+              $('#todo_list').append(temp_html);
+            }
           });
       }
 
@@ -156,6 +186,8 @@
         <button>체크</button>
       </div>
     </div>
+
+    <div id="todo_list"></div>
 
     <!-- 날짜선택, 인풋(내용작성), 기록하기버튼 -->
     <div class="myinput">
